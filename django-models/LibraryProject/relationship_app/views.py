@@ -1,3 +1,21 @@
 from django.shortcuts import render
+from .models import Book, Library
+from django.views.generic import DetailView
 
-# Create your views here.
+
+def book_list(request):
+    """Function-based view: list all books."""
+    books = Book.objects.select_related('author').all()
+    return render(request, 'relationship_app/list_books.html', {'books': books})
+
+
+
+class LibraryDetailView(DetailView):
+    """Class-based view: show a single library and its books."""
+    model = Library
+    template_name = 'relationship_app/library_detail.html'
+    context_object_name = 'library'
+
+    def get_queryset(self):
+        # Pull related books + authors efficiently
+        return Library.objects.prefetch_related('books__author')
