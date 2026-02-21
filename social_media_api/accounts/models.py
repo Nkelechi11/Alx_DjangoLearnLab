@@ -14,3 +14,6 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.username
+    
+# everything above is about project setup and custom user model creation
+

@@ -45,3 +45,4 @@ class LoginSerializer(serializers.Serializer):
         }
     
 
+# everything above is about project setup and custom user model creation

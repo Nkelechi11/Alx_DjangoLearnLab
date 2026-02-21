@@ -42,3 +42,4 @@ class ProfileView(APIView):
         serializer.save()
         return Response(serializer.data)
 
+# everything above is about project setup and custom user model creation
