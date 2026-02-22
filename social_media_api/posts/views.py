@@ -21,7 +21,7 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
 from rest_framework import viewsets
 from .models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly , IsAuthenticated
 from rest_framework import filters
 
 
@@ -44,3 +44,20 @@ class CommentViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
+# view for follow and unfollow feed
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
+from rest_framework import status
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def user_feed(request):
+    followed_users = request.user.following.all()
+
+    posts = Post.objects.filter(
+        author__in=followed_users
+    ).order_by("-created_at")
+
+    serializer = PostSerializer(posts, many=True)
+
+    return Response(serializer.data, status=status.HTTP_200_OK)

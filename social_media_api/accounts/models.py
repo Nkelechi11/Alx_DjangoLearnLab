@@ -5,10 +5,16 @@ from django.contrib.auth.models import AbstractUser
 class User(AbstractUser):
     bio = models.TextField(blank=True)
     profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
-    followers = models.ManyToManyField(
-        'self',
+    # followers = models.ManyToManyField(
+    #     'self',
+    #     symmetrical=False,
+    #     related_name='following',
+    #     blank=True
+    # )
+    following = models.ManyToManyField(
+        "self",
         symmetrical=False,
-        related_name='following',
+        related_name="followers",
         blank=True
     )
 
@@ -16,4 +22,7 @@ class User(AbstractUser):
         return self.username
     
 # everything above is about project setup and custom user model creation
+
+
+# creating and allowing following options
 
