@@ -65,15 +65,16 @@ from rest_framework import generics, status
 
 #     return Response(serializer.data, status=status.HTTP_200_OK)
 
+
 class UserFeedView(generics.GenericAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = PostSerializer
 
     def get(self, request):
-        followed_users = request.user.following.all()
+        following_users = request.user.following.all()
 
         posts = Post.objects.filter(
-            author__in=followed_users
+            author__in=following_users
         ).order_by("-created_at")
 
         serializer = self.get_serializer(posts, many=True)
