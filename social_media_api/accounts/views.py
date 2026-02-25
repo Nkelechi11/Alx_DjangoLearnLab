@@ -59,6 +59,12 @@ class ProfileView(APIView):
 # ------------------------
 # Follow a User
 # ------------------------
+# ------------------------
+# Follow a User (with notification)
+# ------------------------
+from django.contrib.contenttypes.models import ContentType
+from notifications.models import Notification
+
 class FollowUserView(generics.GenericAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
@@ -77,7 +83,19 @@ class FollowUserView(generics.GenericAPIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
+        # Add the user to following
         request.user.following.add(user_to_follow)
+
+        # ------------------------
+        # Create Notification
+        # ------------------------
+        Notification.objects.create(
+            recipient=user_to_follow,
+            actor=request.user,
+            verb="started following you",
+            content_type=ContentType.objects.get_for_model(user_to_follow),
+            object_id=user_to_follow.id
+        )
 
         return Response(
             {"message": f"You are now following {user_to_follow.username}."},

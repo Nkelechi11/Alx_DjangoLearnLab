@@ -22,6 +22,7 @@ urlpatterns = [
     path('api/accounts/', include('accounts.urls')),
     # part 2
     path('api/', include('posts.urls')),
+    path("notifications/", include("notifications.urls")),
 ]
 
 
