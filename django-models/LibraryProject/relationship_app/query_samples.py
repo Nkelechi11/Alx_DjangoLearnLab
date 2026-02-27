@@ -1,32 +1,18 @@
-from django.db import models
+# LibraryProject/relationship_app/query_samples.py
+
+from relationship_app.models import Author, Book, Library, Librarian
 
 
-class Author(models.Model):
-    name = models.CharField(max_length=255)
-
-    def __str__(self):
-        return self.name
+def query_books_by_author(author_name):
+    author = Author.objects.get(name=author_name)
+    return Book.objects.filter(author=author)
 
 
-class Book(models.Model):
-    title = models.CharField(max_length=255)
-    author = models.ForeignKey(Author, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.title
+def list_books_in_library(library_name):
+    library = Library.objects.get(name=library_name)
+    return library.books.all()
 
 
-class Library(models.Model):
-    name = models.CharField(max_length=255)
-    books = models.ManyToManyField(Book)
-
-    def __str__(self):
-        return self.name
-
-
-class Librarian(models.Model):
-    name = models.CharField(max_length=255)
-    library = models.OneToOneField(Library, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.name
+def get_librarian_for_library(library_name):
+    library = Library.objects.get(name=library_name)
+    return Librarian.objects.get(library=library)
