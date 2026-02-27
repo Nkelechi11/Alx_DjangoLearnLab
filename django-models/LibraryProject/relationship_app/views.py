@@ -115,3 +115,21 @@ class UserLogoutView(LogoutView):
     next_page = reverse_lazy("relationship_app:login")
 
 
+from django.shortcuts import render, redirect
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
+from .models import Book, Library
+from django.views.generic.detail import DetailView
+
+
+def register(request):
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect("relationship_app:login")
+    else:
+        form = UserCreationForm()
+
+    return render(request, "relationship_app/register.html", {"form": form})
