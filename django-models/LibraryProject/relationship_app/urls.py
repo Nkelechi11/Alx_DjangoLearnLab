@@ -45,3 +45,17 @@ urlpatterns = [
     path("logout/", LogoutView.as_view(template_name="relationship_app/logout.html"), name="logout"),
 
 ]
+
+# relationship_app/urls.py
+
+from django.urls import path
+from . import views
+
+app_name = "relationship_app"
+
+urlpatterns = [
+    # Role-based access URLs
+    path("admin-view/", views.admin_view, name="admin_view"),
+    path("librarian-view/", views.librarian_view, name="librarian_view"),
+    path("member-view/", views.member_view, name="member_view"),
+]
