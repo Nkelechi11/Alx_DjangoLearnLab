@@ -5,10 +5,36 @@ from .views import list_books, LibraryDetailView
 
 app_name = "relationship_app"
 
-urlpatterns = [
-    # Function-based view URL
-    path("books/", list_books, name="list_books"),
+# urlpatterns = [
+#     # Function-based view URL
+#     path("books/", list_books, name="list_books"),
     
-    # Class-based view URL
+#     # Class-based view URL
+#     path("library/<int:pk>/", LibraryDetailView.as_view(), name="library_detail"),
+# ]
+# after implementing user authentication
+
+# from django.urls import path
+from .views import (
+    # list_books,
+    # LibraryDetailView,
+    RegisterView,
+    UserLoginView,
+    UserLogoutView,
+)
+
+app_name = "relationship_app"
+
+urlpatterns = [
+    # Function-based view
+    path("books/", list_books, name="list_books"),
+
+    # Class-based view
     path("library/<int:pk>/", LibraryDetailView.as_view(), name="library_detail"),
+
+    # Authentication URLs
+    path("register/", RegisterView.as_view(), name="register"),
+    path("login/", UserLoginView.as_view(), name="login"),
+    path("logout/", UserLogoutView.as_view(), name="logout"),
+
 ]
